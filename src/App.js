@@ -54,11 +54,8 @@ class PreviewPanel extends Component {
 
 class ControlPanel extends Component {
     render() {
-        const gender = libmoji.genders[0];
-        const style = libmoji.styles[1];
-        const traits = libmoji.getTraits(gender[0],style[0]);
-
-        const traits_list = traits.map((trait, index) => {
+        const all_traits = libmoji.getTraits(this.props.gender[0], this.props.style[0]);
+        const traits_list = all_traits.map((trait, index) => {
             return (
                 <li key={index}>
                     {changeCase.titleCase(trait.key)} <Glyphicon glyph="chevron-left" /> <Glyphicon glyph="chevron-right" />
