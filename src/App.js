@@ -81,6 +81,26 @@ class ControlPanel extends Component {
 }
 
 class App extends Component {
+    constructor(props) {
+        super()
+        this.state = {
+            gender: libmoji.genders[0],
+            style: libmoji.styles[1],
+            all_traits: [],
+            trait_settings: []
+        };
+    }
+    componentDidMount() {
+        let all_traits = libmoji.getTraits(this.state.gender[0], this.state.style[0]);
+        let trait_settings = [];
+        for (let trait of all_traits) {
+            trait_settings[trait.key] = trait.options[0].value
+        }
+        this.setState({
+            trait_settings: trait_settings,
+            all_traits: all_traits
+        });
+    }
     render() {
         return (
             <div>
@@ -89,10 +109,10 @@ class App extends Component {
                     <Grid>
                         <Row>
                             <Col md={4}>
-                                <PreviewPanel />
+                                <PreviewPanel gender={this.state.gender} style={this.state.style} trait_settings={this.state.trait_settings} />
                             </Col>
                             <Col md={8}>
-                                <ControlPanel />
+                                <ControlPanel gender={this.state.gender} style={this.state.style} />
                             </Col>
                         </Row>
                     </Grid>
