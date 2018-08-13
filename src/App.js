@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Image, Panel, Grid, Row, Col} from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Image, Panel, Grid, Row, Col, Glyphicon} from 'react-bootstrap';
 import logo from './logo.svg';
 import libmoji from 'libmoji';
+import changeCase from 'change-case'; 
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -53,13 +54,26 @@ class PreviewPanel extends Component {
 
 class ControlPanel extends Component {
     render() {
+        const gender = libmoji.genders[0];
+        const style = libmoji.styles[1];
+        const traits = libmoji.getTraits(gender[0],style[0]);
+
+        const traits_list = traits.map((trait, index) => {
+            return (
+                <li key={index}>
+                    {changeCase.titleCase(trait.key)} <Glyphicon glyph="chevron-left" /> <Glyphicon glyph="chevron-right" />
+                </li>
+            );
+        });
         return (
             <Panel>
                 <Panel.Heading>
                     <Panel.Title componentClass="h3">Options</Panel.Title>
                 </Panel.Heading>
                 <Panel.Body>
-                    <Image width="500" src="https://preview.bitmoji.com/avatar-builder-v3/preview/body?scale=3&gender=2&style=1&rotation=0&brow=109&cheek_details=241&ear=246&earring=511&eye=147&eyelash=-1&eye_details=634&face_lines=250&glasses=561&hair=321&hat=27&jaw=285&mouth=196&nose=625&pupil=226&blush_tone=-1&brow_tone=3415562&eyeshadow_tone=12098752&hair_tone=8637550&lipstick_tone=2565927&pupil_tone=6064564&skin_tone=12434877&body=2&breast=1&face_proportion=1&outfit=889202" />
+                    <ul>
+                        {traits_list}
+                    </ul>
                 </Panel.Body>
             </Panel>
         )
