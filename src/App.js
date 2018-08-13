@@ -38,6 +38,18 @@ class NavigationBar extends Component {
 }
 
 class PreviewPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            preview_url: ''
+        }
+    }
+    componentDidMount() {
+        let outfit = libmoji.randOutfit(libmoji.getOutfits(libmoji.randBrand(libmoji.getBrands(this.props.gender[0]))));
+        this.setState({
+            preview_url: libmoji.buildPreviewUrl("body", 3,this.props.gender[1],this.props.style[1],0 , this.props.trait_settings, outfit)
+        });
+    }
     render() {
         return (
             <Panel>
@@ -45,7 +57,7 @@ class PreviewPanel extends Component {
                     <Panel.Title componentClass="h3">Preview</Panel.Title>
                 </Panel.Heading>
                 <Panel.Body>
-                    <Image width="300" src="https://preview.bitmoji.com/avatar-builder-v3/preview/body?scale=3&gender=2&style=1&rotation=0&brow=109&cheek_details=241&ear=246&earring=511&eye=147&eyelash=-1&eye_details=634&face_lines=250&glasses=561&hair=321&hat=27&jaw=285&mouth=196&nose=625&pupil=226&blush_tone=-1&brow_tone=3415562&eyeshadow_tone=12098752&hair_tone=8637550&lipstick_tone=2565927&pupil_tone=6064564&skin_tone=12434877&body=2&breast=1&face_proportion=1&outfit=889202" />
+                    <Image width="300" src={this.state.preview_url} />
                 </Panel.Body>
             </Panel>
         )
