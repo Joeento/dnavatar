@@ -40,19 +40,21 @@ class NavigationBar extends Component {
 class PreviewPanel extends Component {
     constructor(props) {
         super(props);
+        let outfit = libmoji.randOutfit(libmoji.getOutfits(libmoji.randBrand(libmoji.getBrands(this.props.gender[0]))));
         this.state = {
+            outfit: outfit,
             preview_url: ''
         }
     }
     componentWillReceiveProps(nextProps) {
-        let outfit = libmoji.randOutfit(libmoji.getOutfits(libmoji.randBrand(libmoji.getBrands(this.props.gender[0]))));
+        
         let traits = [];
         for (let trait_name in nextProps.trait_settings) {
             traits.push([trait_name, nextProps.all_traits_hash[trait_name][nextProps.trait_settings[trait_name]].value]);
         }
 
         this.setState({
-            preview_url: libmoji.buildPreviewUrl("body", 3, nextProps.gender[1], nextProps.style[1], 0, traits, outfit)
+            preview_url: libmoji.buildPreviewUrl("body", 3, nextProps.gender[1], nextProps.style[1], 0, traits, this.state.outfit)
         });
 
     }
