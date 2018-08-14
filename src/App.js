@@ -44,11 +44,17 @@ class PreviewPanel extends Component {
             preview_url: ''
         }
     }
-    componentDidMount() {
+    componentWillReceiveProps(nextProps) {
         let outfit = libmoji.randOutfit(libmoji.getOutfits(libmoji.randBrand(libmoji.getBrands(this.props.gender[0]))));
+        let traits = [];
+        for (let trait_name in nextProps.trait_settings) {
+            traits.push([trait_name, nextProps.all_traits_hash[trait_name][nextProps.trait_settings[trait_name]].value]);
+        }
+
         this.setState({
-            preview_url: libmoji.buildPreviewUrl("body", 3,this.props.gender[1],this.props.style[1],0 , this.props.trait_settings, outfit)
+            preview_url: libmoji.buildPreviewUrl("body", 3, nextProps.gender[1], nextProps.style[1], 0, traits, outfit)
         });
+
     }
     render() {
         return (
@@ -70,7 +76,9 @@ class ControlPanel extends Component {
         const traits_list = all_traits.map((trait, index) => {
             return (
                 <li key={index}>
-                    {changeCase.titleCase(trait.key)} <Glyphicon glyph="chevron-left" /> <Glyphicon glyph="chevron-right" />
+                    {changeCase.titleCase(trait.key)}
+                    <button onClick={() => this.props.decrementSetting(trait.key)}><Glyphicon glyph="chevron-left" /></button>
+                    <button onClick={() => this.props.incrementSetting(trait.key)}><Glyphicon glyph="chevron-right" /></button>
                 </li>
             );
         });
@@ -96,19 +104,35 @@ class App extends Component {
             gender: libmoji.genders[0],
             style: libmoji.styles[1],
             all_traits: [],
+            all_traits_hash: [],
             trait_settings: []
         };
+        this.incrementSetting = this.incrementSetting.bind(this);
+        this.decrementSetting = this.decrementSetting.bind(this);
     }
     componentDidMount() {
         let all_traits = libmoji.getTraits(this.state.gender[0], this.state.style[0]);
         let trait_settings = [];
+        let all_traits_hash = [];
         for (let trait of all_traits) {
-            trait_settings[trait.key] = trait.options[0].value
+            trait_settings[trait.key] = 0,
+            all_traits_hash[trait.key] = trait.options
         }
         this.setState({
             trait_settings: trait_settings,
-            all_traits: all_traits
+            all_traits: all_traits,
+            all_traits_hash: all_traits_hash
         });
+    }
+    incrementSetting(trait) {
+        let new_trait_settings = this.state.trait_settings;
+        new_trait_settings[trait] += 1;
+        this.setState({ trait_settings: new_trait_settings });
+    }
+    decrementSetting(trait) {
+        let new_trait_settings = this.state.trait_settings;
+        new_trait_settings[trait] -= 1;
+        this.setState({ trait_settings: new_trait_settings });
     }
     render() {
         return (
@@ -118,10 +142,10 @@ class App extends Component {
                     <Grid>
                         <Row>
                             <Col md={4}>
-                                <PreviewPanel gender={this.state.gender} style={this.state.style} trait_settings={this.state.trait_settings} />
+                                <PreviewPanel gender={this.state.gender} style={this.state.style} trait_settings={this.state.trait_settings} all_traits_hash={this.state.all_traits_hash} />
                             </Col>
                             <Col md={8}>
-                                <ControlPanel gender={this.state.gender} style={this.state.style} />
+                                <ControlPanel gender={this.state.gender} style={this.state.style} decrementSetting={this.decrementSetting} incrementSetting={this.incrementSetting} />
                             </Col>
                         </Row>
                     </Grid>
