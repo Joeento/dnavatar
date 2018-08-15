@@ -74,8 +74,7 @@ class PreviewPanel extends Component {
 
 class ControlPanel extends Component {
     render() {
-        const all_traits = libmoji.getTraits(this.props.gender[0], this.props.style[0]);
-        const traits_list = all_traits.map((trait, index) => {
+        const traits_list = this.props.all_traits.map((trait, index) => {
             return (
                 <li key={index}>
                     {changeCase.titleCase(trait.key)}
@@ -147,7 +146,7 @@ class App extends Component {
                                 <PreviewPanel gender={this.state.gender} style={this.state.style} trait_settings={this.state.trait_settings} all_traits_hash={this.state.all_traits_hash} />
                             </Col>
                             <Col md={8}>
-                                <ControlPanel gender={this.state.gender} style={this.state.style} decrementSetting={this.decrementSetting} incrementSetting={this.incrementSetting} />
+                                <ControlPanel gender={this.state.gender} style={this.state.style} all_traits={this.state.all_traits} decrementSetting={this.decrementSetting} incrementSetting={this.incrementSetting} />
                             </Col>
                         </Row>
                     </Grid>
