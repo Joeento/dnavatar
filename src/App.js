@@ -75,12 +75,14 @@ class PreviewPanel extends Component {
 class ControlPanel extends Component {
     render() {
         const traits_list = this.props.all_traits.map((trait, index) => {
+            let type = this.state.overrides.hasOwnProperty(trait.key) ? this.state.overrides[trait.key] : 'arrows';
             return (
-                <li key={index}>
-                    {changeCase.titleCase(trait.key)}
-                    <button onClick={() => this.props.decrementSetting(trait.key)}><Glyphicon glyph="chevron-left" /></button>
-                    <button onClick={() => this.props.incrementSetting(trait.key)}><Glyphicon glyph="chevron-right" /></button>
-                </li>
+                <TraitSelector 
+                    key={index}
+                    trait_name={trait.key}
+                    type={type}
+                    incrementSetting={this.props.incrementSetting}
+                    decrementSetting={this.props.decrementSetting} />
             );
         });
         return (
@@ -95,6 +97,33 @@ class ControlPanel extends Component {
                 </Panel.Body>
             </Panel>
         )
+    }
+}
+
+class TraitSelector extends Component {
+    render() {
+        let selector = null;
+        switch(this.props.type) {
+            case 'color':
+                selector = (
+                    <BlockPicker />
+                );
+                break;
+            default:
+                selector = (
+                    <div>
+                        <button onClick={() => this.props.decrementSetting(this.props.trait_name)}><Glyphicon glyph="chevron-left" /></button>
+                        <button onClick={() => this.props.incrementSetting(this.props.trait_name)}><Glyphicon glyph="chevron-right" /></button>
+                    </div>
+                );
+                break;
+        }
+        return (
+            <li>
+                {changeCase.titleCase(this.props.trait_name)}
+                {selector}
+            </li>
+        );
     }
 }
 
