@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Image, Panel, Grid, Row, Col, Glyphicon} from 'react-bootstrap';
 import logo from './logo.svg';
 import libmoji from 'libmoji';
-import changeCase from 'change-case'; 
+import changeCase from 'change-case';
+import { BlockPicker } from 'react-color';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -73,6 +74,21 @@ class PreviewPanel extends Component {
 }
 
 class ControlPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            overrides: {
+                beard_tone: 'color',
+                blush_tone: 'color',
+                brow_tone: 'color',
+                eyeshadow_tone: 'color',
+                hair_tone: 'color',
+                lipstick_tone: 'color',
+                pupil_tone: 'color',
+                skin_tone: 'color'
+            }
+        }
+    }
     render() {
         const traits_list = this.props.all_traits.map((trait, index) => {
             let type = this.state.overrides.hasOwnProperty(trait.key) ? this.state.overrides[trait.key] : 'arrows';
