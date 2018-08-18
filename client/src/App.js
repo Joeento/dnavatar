@@ -6,34 +6,19 @@ import changeCase from 'change-case';
 import reactCSS from 'reactcss'
 import { BlockPicker } from 'react-color';
 
-import './App.css';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
-
+import './App.css';
 class NavigationBar extends Component {
     render() {
         return (
-            <Navbar>
+            <Navbar inverse>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#home">React-Bootstrap</a>
+                        <a href="#home"><img src="images/logo.png" />DNAvatar</a>
                     </Navbar.Brand>
                 </Navbar.Header>
-                <Nav>
-                    <NavItem eventKey={1} href="#">
-                        Link
-                    </NavItem>
-                    <NavItem eventKey={2} href="#">
-                        Link
-                    </NavItem>
-                    <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                        <MenuItem eventKey={3.1}>Action</MenuItem>
-                        <MenuItem eventKey={3.2}>Another action</MenuItem>
-                        <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                        <MenuItem divider />
-                        <MenuItem eventKey={3.4}>Separated link</MenuItem>
-                    </NavDropdown>
-                </Nav>
             </Navbar>
         );
     }
@@ -252,7 +237,7 @@ class App extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="app">
                 <NavigationBar />
                 <div className="container">
                     <Grid>

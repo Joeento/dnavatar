@@ -26,3 +26,22 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.navbar-inverse {
+  background: #f6a821;
+  border-color: #d8931c
+
+}
+
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
+  color: #FFFFFF
+}
+
+.navbar-brand > img {
+  display: inline;
+  margin-right: 6px;
+}
+
+.app {
+  background: #f8fbff;
+}
