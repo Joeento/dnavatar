@@ -48,9 +48,6 @@ class PreviewPanel extends Component {
     render() {
         return (
             <Panel>
-                <Panel.Heading>
-                    <Panel.Title componentClass="h3">Preview</Panel.Title>
-                </Panel.Heading>
                 <Panel.Body>
                     <Image width="300" src={this.state.preview_url} />
                 </Panel.Body>
@@ -89,9 +86,6 @@ class ControlPanel extends Component {
         });
         return (
             <Panel>
-                <Panel.Heading>
-                    <Panel.Title componentClass="h3">Options</Panel.Title>
-                </Panel.Heading>
                 <Panel.Body>
                     <ul>
                         {traits_list}
