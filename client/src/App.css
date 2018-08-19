@@ -45,3 +45,8 @@
 .app {
   background: #f8fbff;
 }
+
+.modal-header {
+    background-color: #4ABDAC;
+    color:white;
+}

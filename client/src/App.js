@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Image, Panel, Grid, Row, Col, Glyphicon} from 'react-bootstrap';
+import { Button, Modal} from 'react-bootstrap';
 import logo from './logo.svg';
 import libmoji from 'libmoji';
 import changeCase from 'change-case';
@@ -190,6 +191,54 @@ class ColorSelector extends React.Component {
       </div>
     )
   }
+}
+class AuthModal extends Component {
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            show: true,
+            authorize_url: ''
+        };
+    }
+    componentDidMount() {
+        this.checAuth()
+            .then(res => this.setState({ authorize_url: res.authorize_url, show: !res.is_authed }))
+            .catch(err => console.log(err));
+    }
+
+    checAuth = async () => {
+        const response = await fetch('/api/auth');
+        const body = await response.json();
+
+        if (response.status !== 200) throw Error(body.message);
+
+        return body;
+    };
+
+    render() {
+        console.log(this.state.authorize_url);
+        return (
+            <div>
+                <Modal show={this.state.show}>
+                    <Modal.Header>
+                        <Modal.Title>Welcome!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h4>Thanks for visiting DNAvatar</h4>
+                        <p>
+                            {"We're here to make you an avatar based entirely on what your DNA says you look like! Before we being though, we'll need you to sign into Genomelink so we can get a sense of your physical makeup."}
+                        </p>
+                        <p>
+                            <a className="btn btn-block btn-social btn-openid" href={this.state.authorize_url}>
+                                <span className="glyphicon glyphicon-log-in"></span>
+                                    Sign in with Genomelink
+                            </a>
+                        </p>
+                    </Modal.Body>
+                </Modal>
+            </div>
+        );
+    }
 }
 
 class App extends Component {
