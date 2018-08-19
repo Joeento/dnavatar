@@ -10,6 +10,7 @@ import { BlockPicker } from 'react-color';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'bootstrap-social/bootstrap-social.css';
 import './App.css';
 class NavigationBar extends Component {
     render() {
@@ -195,31 +196,11 @@ class ColorSelector extends React.Component {
 class AuthModal extends Component {
     constructor(props, context) {
         super(props, context);
-        this.state = {
-            show: true,
-            authorize_url: ''
-        };
     }
-    componentDidMount() {
-        this.checAuth()
-            .then(res => this.setState({ authorize_url: res.authorize_url, show: !res.is_authed }))
-            .catch(err => console.log(err));
-    }
-
-    checAuth = async () => {
-        const response = await fetch('/api/auth');
-        const body = await response.json();
-
-        if (response.status !== 200) throw Error(body.message);
-
-        return body;
-    };
-
     render() {
-        console.log(this.state.authorize_url);
         return (
             <div>
-                <Modal show={this.state.show}>
+                <Modal show={this.props.show}>
                     <Modal.Header>
                         <Modal.Title>Welcome!</Modal.Title>
                     </Modal.Header>
@@ -249,7 +230,10 @@ class App extends Component {
             style: libmoji.styles[1],
             all_traits: [],
             all_traits_hash: [],
-            trait_settings: []
+            trait_settings: [],
+
+            authorize_url: '',
+            showModal: true
         };
         this.incrementSetting = this.incrementSetting.bind(this);
         this.decrementSetting = this.decrementSetting.bind(this);
@@ -267,6 +251,11 @@ class App extends Component {
             all_traits: all_traits,
             all_traits_hash: all_traits_hash
         });
+
+        //Show modal
+        this.checkAuth()
+            .then(res => this.setState({ authorize_url: res.authorize_url, show: !res.is_authed }))
+            .catch(err => console.log(err));
     }
     incrementSetting(trait) {
         let new_trait_settings = this.state.trait_settings;
@@ -278,10 +267,19 @@ class App extends Component {
         new_trait_settings[trait] -= 1;
         this.setState({ trait_settings: new_trait_settings });
     }
+     checkAuth = async () => {
+        const response = await fetch('/api/auth');
+        const body = await response.json();
+
+        if (response.status !== 200) throw Error(body.message);
+
+        return body;
+    };
     render() {
         return (
             <div className="app">
                 <NavigationBar />
+                <AuthModal show={this.state.showModal} authorize_url={this.state.authorize_url}  />
                 <div className="container">
                     <Grid>
                         <Row>
