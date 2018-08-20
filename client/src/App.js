@@ -101,7 +101,6 @@ class InfoModal extends Component {
             <Modal.Title>How did I get this image?</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Text in a modal</h4>
             <p>
               {"Your bitmoji avatar is created based on the genome data you uploaded at "}<a href='https://genomelink.io/'>genomelink.io</a>{".  DNA data from your genome can be used to predict your physical traits, such as beard thickness, hair color, skin tone, etc.  Below, you'll find a complete list of the data extracted from your genome and used in this bitmoji."}
             </p>
