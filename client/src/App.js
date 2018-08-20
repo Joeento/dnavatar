@@ -337,12 +337,20 @@ class App extends Component {
     }
     incrementSetting(trait) {
         let new_trait_settings = this.state.trait_settings;
-        new_trait_settings[trait] += 1;
+        if (new_trait_settings[trait] < this.state.all_traits_hash[trait].length - 1) {
+            new_trait_settings[trait] += 1;
+        } else {
+            alert('There are no more options in that direction.');
+        }
         this.setState({ trait_settings: new_trait_settings });
     }
     decrementSetting(trait) {
         let new_trait_settings = this.state.trait_settings;
-        new_trait_settings[trait] -= 1;
+        if (new_trait_settings[trait] > 0) {
+            new_trait_settings[trait] -= 1;    
+        } else {
+            alert('There are no more options in that direction.');
+        }
         this.setState({ trait_settings: new_trait_settings });
     }
     checkAuth = async () => {
