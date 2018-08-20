@@ -33,8 +33,12 @@ class PreviewPanel extends Component {
         let outfit = libmoji.randOutfit(libmoji.getOutfits(libmoji.randBrand(libmoji.getBrands(this.props.gender[0]))));
         this.state = {
             outfit: outfit,
-            preview_url: ''
+            preview_url: '',
+            showModal: false
         }
+
+        this.showInfoModal = this.showInfoModal.bind(this);
+        this.hideInfoModal = this.hideInfoModal.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         
@@ -48,15 +52,68 @@ class PreviewPanel extends Component {
         });
 
     }
+    showInfoModal() {
+        this.setState({
+            showModal: true
+        });
+    }
+    hideInfoModal() {
+        this.setState({
+            showModal: false
+        });
+    }
     render() {
         return (
             <Panel>
                 <Panel.Body>
                     <Image width="300" src={this.state.preview_url} />
+                    <hr />
+                    <div className="pull-right">
+                        <a href="#" onClick={() => this.showInfoModal()}>How did I get this image?</a>
+                    </div>
+                    <InfoModal show={this.state.showModal} showInfoModal={this.showInfoModal} hideInfoModal={this.hideInfoModal} />
                 </Panel.Body>
             </Panel>
         )
     }
+}
+
+class InfoModal extends Component {
+    constructor(props, context) {
+        super(props, context);
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+    }
+
+    handleClose() {
+        this.props.hideInfoModal();
+    }
+
+    handleShow() {
+        this.props.showInfoModal();
+    }
+
+  render() {
+    return (
+      <div>
+        <Modal show={this.props.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>How did I get this image?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Text in a modal</h4>
+            <p>
+              {"Your bitmoji avatar is created based on the genome data you uploaded at "}<a href='https://genomelink.io/'>genomelink.io</a>{".  DNA data from your genome can be used to predict your physical traits, such as beard thickness, hair color, skin tone, etc.  Below, you'll find a complete list of the data extracted from your genome and used in this bitmoji."}
+            </p>
+
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleClose}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
 }
 
 class ControlPanel extends Component {
