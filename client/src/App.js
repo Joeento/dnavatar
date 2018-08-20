@@ -6,6 +6,7 @@ import libmoji from 'libmoji';
 import changeCase from 'change-case';
 import reactCSS from 'reactcss'
 import { BlockPicker } from 'react-color';
+import {getParameterByName} from './utilities'
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -210,7 +211,7 @@ class AuthModal extends Component {
                             {"We're here to make you an avatar based entirely on what your DNA says you look like! Before we being though, we'll need you to sign into Genomelink so we can get a sense of your physical makeup."}
                         </p>
                         <p>
-                            <a className="btn btn-block btn-social btn-openid" href={this.state.authorize_url}>
+                            <a className="btn btn-block btn-social btn-openid" href={this.props.authorize_url}>
                                 <span className="glyphicon glyphicon-log-in"></span>
                                     Sign in with Genomelink
                             </a>
@@ -239,6 +240,7 @@ class App extends Component {
         this.decrementSetting = this.decrementSetting.bind(this);
     }
     componentDidMount() {
+        const self = this;
         let all_traits = libmoji.getTraits(this.state.gender[0], this.state.style[0]);
         let trait_settings = [];
         let all_traits_hash = [];
@@ -254,7 +256,27 @@ class App extends Component {
 
         //Show modal
         this.checkAuth()
-            .then(res => this.setState({ authorize_url: res.authorize_url, show: !res.is_authed }))
+            .then(function(res) {
+
+                if (!res.is_authed && !getParameterByName('code')) {
+                    console.log('1');
+                    self.setState({ authorize_url: res.authorize_url, showModal: true })    
+                } else if (getParameterByName('code')) {
+                    console.log('2');
+                    let code = getParameterByName('code');
+                    self.checkCode(code)
+                        .then(function(res) {
+                            if (res.is_authed) {
+                                self.setState({showModal: false});
+                            }
+                            console.log('done');
+                        });
+                } else {
+                    console.log('3');
+                    self.setState({showModal: false});
+                }
+                
+            })
             .catch(err => console.log(err));
     }
     incrementSetting(trait) {
@@ -267,8 +289,16 @@ class App extends Component {
         new_trait_settings[trait] -= 1;
         this.setState({ trait_settings: new_trait_settings });
     }
-     checkAuth = async () => {
+    checkAuth = async () => {
         const response = await fetch('/api/auth');
+        const body = await response.json();
+
+        if (response.status !== 200) throw Error(body.message);
+
+        return body;
+    };
+    checkCode = async (code) => {
+        const response = await fetch('/api/code?code=' + code);
         const body = await response.json();
 
         if (response.status !== 200) throw Error(body.message);
