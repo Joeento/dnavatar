@@ -315,20 +315,16 @@ class App extends Component {
             .then(function(res) {
 
                 if (!res.is_authed && !getParameterByName('code')) {
-                    console.log('1');
                     self.setState({ authorize_url: res.authorize_url, showModal: true })    
                 } else if (getParameterByName('code')) {
-                    console.log('2');
                     let code = getParameterByName('code');
                     self.checkCode(code)
                         .then(function(res) {
                             if (res.is_authed) {
                                 self.setState({showModal: false});
                             }
-                            console.log('done');
                         });
                 } else {
-                    console.log('3');
                     self.setState({showModal: false});
                 }
                 
