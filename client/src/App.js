@@ -147,23 +147,33 @@ class ControlPanel extends Component {
         }
     }
     render() {
+        
         const traits_list = this.props.all_traits.map((trait, index) => {
-            let type = this.state.overrides.hasOwnProperty(trait.key) ? this.state.overrides[trait.key] : 'arrows';
+            return index % 4 === 0 ? this.props.all_traits.slice(index, index + 4) : null;
+        }).filter(x => x != null);
+        const traits_grid = traits_list.map((result, index) => {
             return (
-                <TraitSelector 
-                    key={index}
-                    trait_name={trait.key}
-                    type={type}
-                    incrementSetting={this.props.incrementSetting}
-                    decrementSetting={this.props.decrementSetting} />
+                <Row key={index} className="trait-row">
+                    {result.map((trait, i) => 
+                        <Col md={3}>
+                            <TraitSelector 
+                                key={i}
+                                trait_name={trait.key}
+
+                                incrementSetting={this.props.incrementSetting}
+                                decrementSetting={this.props.decrementSetting} />
+                        </Col>
+                    )}
+                </Row>
             );
-        });
+        })
         return (
+            
             <Panel>
                 <Panel.Body>
-                    <ul>
-                        {traits_list}
-                    </ul>
+                    <Grid>
+                        {traits_grid}
+                    </Grid>
                 </Panel.Body>
             </Panel>
         )
@@ -189,10 +199,10 @@ class TraitSelector extends Component {
                 break;
         }
         return (
-            <li>
+            <div>
                 {changeCase.titleCase(this.props.trait_name)}
                 {selector}
-            </li>
+            </div>
         );
     }
 }
