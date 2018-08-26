@@ -98,7 +98,8 @@ class InfoModal extends Component {
     const formatted_trait_summaries = Object.keys(this.props.trait_summaries).map((trait, index) => {
         return (
             <li key={index}>
-                <strong>{changeCase.titleCase(trait)}</strong>: 
+                <strong>{changeCase.titleCase(trait)}</strong>:
+                &nbsp;
                 {self.props.trait_summaries[trait]}
             </li>
         );
