@@ -62,6 +62,7 @@ async function getVisualData(token, scope) {
 			token: token
 		});
 	}));
+
 	for (let index in reports) {
 		
 		if (reports[index]._data.hasOwnProperty('phenotype')) {
@@ -69,7 +70,9 @@ async function getVisualData(token, scope) {
 			
 			if (report_to_trait.hasOwnProperty(report)) {
 				let trait = report_to_trait[report].key;
-				results[trait] = report_to_trait[report].map[reports[index]._data.summary.score];
+				results[trait] = {};
+				results[trait].score = report_to_trait[report].map[reports[index]._data.summary.score];
+				results[trait].text = reports[index]._data.summary.text;
 			}
 			
 		}

@@ -321,9 +321,10 @@ class App extends Component {
                     self.checkCode(code)
                         .then(function(res) {
                             if (res.is_authed) {
+                                
                                 let trait_settings = self.state.trait_settings;
                                 for (let trait in res.results) {
-                                    trait_settings[trait] = res.results[trait];
+                                    trait_settings[trait] = res.results[trait].score;
                                 }
                                 self.setState({
                                     showModal: false,
