@@ -133,6 +133,7 @@ class ControlPanel extends Component {
         super(props);
         this.state = {
             overrides: {
+                /*
                 beard_tone: 'color',
                 blush_tone: 'color',
                 brow_tone: 'color',
@@ -141,6 +142,7 @@ class ControlPanel extends Component {
                 lipstick_tone: 'color',
                 pupil_tone: 'color',
                 skin_tone: 'color'
+                */
             }
         }
     }
