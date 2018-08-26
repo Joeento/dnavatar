@@ -71,7 +71,7 @@ class PreviewPanel extends Component {
                     <div className="pull-right">
                         <a href="#" onClick={() => this.showInfoModal()}>How did I get this image?</a>
                     </div>
-                    <InfoModal show={this.state.showModal} showInfoModal={this.showInfoModal} hideInfoModal={this.hideInfoModal} />
+                    <InfoModal show={this.state.showModal} showInfoModal={this.showInfoModal} hideInfoModal={this.hideInfoModal} trait_summaries={this.props.trait_summaries} />
                 </Panel.Body>
             </Panel>
         )
@@ -94,6 +94,15 @@ class InfoModal extends Component {
     }
 
   render() {
+    let self = this;
+    const formatted_trait_summaries = Object.keys(this.props.trait_summaries).map((trait, index) => {
+        return (
+            <li key={index}>
+                <strong>{changeCase.titleCase(trait)}</strong>: 
+                {self.props.trait_summaries[trait]}
+            </li>
+        );
+    });
     return (
       <div>
         <Modal show={this.props.show} onHide={this.handleClose}>
@@ -104,6 +113,9 @@ class InfoModal extends Component {
             <p>
               {"Your bitmoji avatar is created based on the genome data you uploaded at "}<a href='https://genomelink.io/'>genomelink.io</a>{".  DNA data from your genome can be used to predict your physical traits, such as beard thickness, hair color, skin tone, etc.  Below, you'll find a complete list of the data extracted from your genome and used in this bitmoji."}
             </p>
+            <ul>
+                {formatted_trait_summaries}
+            </ul>
 
           </Modal.Body>
           <Modal.Footer>
@@ -288,6 +300,7 @@ class App extends Component {
             all_traits: [],
             all_traits_hash: [],
             trait_settings: [],
+            trait_summaries: [],
 
             authorize_url: '',
             showModal: true
@@ -300,6 +313,7 @@ class App extends Component {
         let all_traits = libmoji.getTraits(this.state.gender[0], this.state.style[0]);
         let trait_settings = [];
         let all_traits_hash = [];
+        let trait_summaries = [];
         for (let trait of all_traits) {
             trait_settings[trait.key] = 0,
             all_traits_hash[trait.key] = trait.options
@@ -307,7 +321,8 @@ class App extends Component {
         this.setState({
             trait_settings: trait_settings,
             all_traits: all_traits,
-            all_traits_hash: all_traits_hash
+            all_traits_hash: all_traits_hash,
+            trait_summaries: trait_summaries
         });
 
         //Show modal
@@ -325,21 +340,25 @@ class App extends Component {
                                 let trait_settings = self.state.trait_settings;
                                 for (let trait in res.results) {
                                     trait_settings[trait] = res.results[trait].score;
+                                    trait_summaries[trait] = res.results[trait].text;
                                 }
                                 self.setState({
                                     showModal: false,
-                                    trait_settings: trait_settings
+                                    trait_settings: trait_settings,
+                                    trait_summaries: trait_summaries
                                 });
                             }
                         });
                 } else {
                     let trait_settings = self.state.trait_settings;
                     for (let trait in res.results) {
-                        trait_settings[trait] = res.results[trait];
+                        trait_settings[trait] = res.results[trait].score;
+                        trait_summaries[trait] = res.results[trait].text;
                     }
                     self.setState({
                         showModal: false,
-                        trait_settings: trait_settings
+                        trait_settings: trait_settings,
+                        trait_summaries: trait_summaries
                     });
                 }
                 
@@ -389,7 +408,7 @@ class App extends Component {
                     <Grid>
                         <Row>
                             <Col md={4}>
-                                <PreviewPanel gender={this.state.gender} style={this.state.style} trait_settings={this.state.trait_settings} all_traits_hash={this.state.all_traits_hash} />
+                                <PreviewPanel gender={this.state.gender} style={this.state.style} trait_settings={this.state.trait_settings} all_traits_hash={this.state.all_traits_hash} trait_summaries={this.state.trait_summaries} />
                             </Col>
                             <Col md={8}>
                                 <ControlPanel gender={this.state.gender} style={this.state.style} all_traits={this.state.all_traits} decrementSetting={this.decrementSetting} incrementSetting={this.incrementSetting} />
