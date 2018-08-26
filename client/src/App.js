@@ -19,7 +19,7 @@ class NavigationBar extends Component {
             <Navbar inverse>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#home"><img src="images/logo.png" />DNAvatar</a>
+                        <a href="/"><img src="images/logo.png" />DNAvatar</a>
                     </Navbar.Brand>
                 </Navbar.Header>
             </Navbar>
