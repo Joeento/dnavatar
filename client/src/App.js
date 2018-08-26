@@ -294,6 +294,17 @@ class AuthModal extends Component {
     }
 }
 
+class Footer extends Component {
+    render() {
+        return (
+            <div>
+                <hr />
+                &copy; 2018 | Special thanks to <a href="https://genomelink.io/">genomelink.io</a>, <a href="https://www.bitmoji.com/">Bitmoji</a>, <a href="https://github.com/matthewnau/libmoji">libmoji</a>, and <a href="http://www.freepik.com">Freepik</a> for the tools I needed to make this idea a reality.
+            </div>
+        );
+    }
+}
+
 class App extends Component {
     constructor(props) {
         super()
@@ -415,6 +426,7 @@ class App extends Component {
                             </Col>
                             <Col md={8}>
                                 <ControlPanel gender={this.state.gender} style={this.state.style} all_traits={this.state.all_traits} decrementSetting={this.decrementSetting} incrementSetting={this.incrementSetting} />
+                                <Footer />
                             </Col>
                         </Row>
                     </Grid>
