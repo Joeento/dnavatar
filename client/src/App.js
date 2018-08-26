@@ -281,6 +281,9 @@ class AuthModal extends Component {
         super(props, context);
     }
     render() {
+        const icon = this.props.loading ? <img src="images/loading.gif" /> : <span className="glyphicon glyphicon-log-in"></span>;
+        const button_mode = this.props.loading ? "btn-github" : "btn-openid";
+        const sign_in_text = this.props.loading ? "Loading..." : "Sign in with Genomelink";
         return (
             <div>
                 <Modal show={this.props.show}>
@@ -293,9 +296,9 @@ class AuthModal extends Component {
                             {"We're here to make you an avatar based entirely on what your DNA says you look like! Before we being though, we'll need you to sign into Genomelink so we can get a sense of your physical makeup."}
                         </p>
                         <p>
-                            <a className="btn btn-block btn-social btn-openid" href={this.props.authorize_url}>
-                                <span className="glyphicon glyphicon-log-in"></span>
-                                    Sign in with Genomelink
+                            <a className={"btn btn-block btn-social " + button_mode} href={this.props.authorize_url}>
+                                {icon}
+                                {sign_in_text}
                             </a>
                         </p>
                     </Modal.Body>
@@ -328,7 +331,8 @@ class App extends Component {
             trait_summaries: [],
 
             authorize_url: '',
-            showModal: true
+            showModal: true,
+            loading: true
         };
         this.incrementSetting = this.incrementSetting.bind(this);
         this.decrementSetting = this.decrementSetting.bind(this);
@@ -355,13 +359,12 @@ class App extends Component {
             .then(function(res) {
 
                 if (!res.is_authed && !getParameterByName('code')) {
-                    self.setState({ authorize_url: res.authorize_url, showModal: true })    
+                    self.setState({ authorize_url: res.authorize_url, showModal: true, loading: false })    
                 } else if (getParameterByName('code')) {
                     let code = getParameterByName('code');
                     self.checkCode(code)
                         .then(function(res) {
                             if (res.is_authed) {
-                                
                                 let trait_settings = self.state.trait_settings;
                                 for (let trait in res.results) {
                                     trait_settings[trait] = res.results[trait].score;
@@ -370,8 +373,12 @@ class App extends Component {
                                 self.setState({
                                     showModal: false,
                                     trait_settings: trait_settings,
-                                    trait_summaries: trait_summaries
+                                    trait_summaries: trait_summaries,
                                 });
+                            } else {
+                                self.setState({
+                                    loading: false
+                                })
                             }
                         });
                 } else {
@@ -428,7 +435,7 @@ class App extends Component {
         return (
             <div className="app">
                 <NavigationBar />
-                <AuthModal show={this.state.showModal} authorize_url={this.state.authorize_url}  />
+                <AuthModal show={this.state.showModal} authorize_url={this.state.authorize_url} loading={this.state.loading}  />
                 <div className="container">
                     <Grid>
                         <Row>
