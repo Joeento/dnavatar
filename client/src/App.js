@@ -192,8 +192,9 @@ class TraitSelector extends Component {
             default:
                 selector = (
                     <div>
-                        <button onClick={() => this.props.decrementSetting(this.props.trait_name)}><Glyphicon glyph="chevron-left" /></button>
-                        <button onClick={() => this.props.incrementSetting(this.props.trait_name)}><Glyphicon glyph="chevron-right" /></button>
+                        <Button bsStyle="info" onClick={() => this.props.decrementSetting(this.props.trait_name)}><Glyphicon glyph="chevron-left" /></Button>
+                        &nbsp;
+                        <Button bsStyle="info" onClick={() => this.props.incrementSetting(this.props.trait_name)}><Glyphicon glyph="chevron-right" /></Button>
                     </div>
                 );
                 break;

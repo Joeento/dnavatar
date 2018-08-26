@@ -50,3 +50,11 @@
     background-color: #4ABDAC;
     color:white;
 }
+
+.btn-info {
+  background: #5bc0de;
+  box-shadow: none;
+}
+.trait-row {
+  margin-bottom: 15px;
+}
