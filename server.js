@@ -93,6 +93,10 @@ async function getVisualData(token, scope) {
 		results.hair_tone.score = hair_range[hair_average];
 		results.hair_tone.text = Math.floor((reports[red_hair_index]._data.summary.score / 5) * 100) + '% red hair and ' + Math.floor((reports[black_hair_index]._data.summary.score / 5) * 100) + '% black hair.';
 
+		results.beard_tone = {};
+		results.beard_tone.score = hair_range[hair_average];
+		results.beard_tone.text = Math.floor((reports[red_hair_index]._data.summary.score / 5) * 100) + '% red hair and ' + Math.floor((reports[black_hair_index]._data.summary.score / 5) * 100) + '% black hair.';
+
 	}
  	
 	return results;
