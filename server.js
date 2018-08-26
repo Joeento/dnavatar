@@ -54,6 +54,8 @@ let report_to_trait = {
 async function getVisualData(token, scope) {
 	let reports = [];
 	let results = {};
+	let red_hair_index = null;
+	let black_hair_index = null;
 	const scopes = scope.split(' ');
 	reports = await Promise.all(scopes.map((name) => {
 		return genomeLink.Report.fetch({
@@ -62,22 +64,37 @@ async function getVisualData(token, scope) {
 			token: token
 		});
 	}));
-
+	
 	for (let index in reports) {
-		
 		if (reports[index]._data.hasOwnProperty('phenotype')) {
-			let report = reports[index]._data.phenotype.url_name;
-			
+			let report = reports[index]._data.phenotype.url_name;	
 			if (report_to_trait.hasOwnProperty(report)) {
 				let trait = report_to_trait[report].key;
 				results[trait] = {};
 				results[trait].score = report_to_trait[report].map[reports[index]._data.summary.score];
 				results[trait].text = reports[index]._data.summary.text;
 			}
+			if (report == 'black-hair') {
+				black_hair_index = index;
+			} else if (report == 'red-hair') {
+				red_hair_index = index;
+			}
 			
 		}
 	}
-	
+
+	console.log(red_hair_index, black_hair_index);
+	if (red_hair_index && black_hair_index) {
+
+		const hair_range = [0, 6, 30, 18, 14];
+		let hair_average = Math.round(reports[red_hair_index]._data.summary.score + reports[black_hair_index]._data.summary.score) / 2;
+
+		results.hair_tone = {};
+		results.hair_tone.score = hair_range[hair_average];
+		results.hair_tone.text = Math.floor((reports[red_hair_index]._data.summary.score / 5) * 100) + '% red hair and ' + Math.floor((reports[black_hair_index]._data.summary.score / 5) * 100) + '% black hair.';
+
+	}
+ 	
 	return results;
 }
 
