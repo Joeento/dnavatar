@@ -26,7 +26,9 @@ yarn dev
 to start on local.  You may also need
 ```
 cd client
+npm start
 ```
+in order to install react packages.
 ```
 
 ### Installing
