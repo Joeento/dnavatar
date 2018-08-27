@@ -14,7 +14,19 @@ $ export GENOMELINK_CLIENT_SECRET=your_client_secret
 $ export GENOMELINK_CALLBACK_URL="http://127.0.0.1:3000/callback"
 ```
 
+Once you have that, it's time to run it.  You'll need `yarn` to do so.  Once you have that, just run
+```
+yarn
+```
+to install the dependencies and then 
 
+```
+yarn dev
+```
+to start on local.  You may also need
+```
+cd client
+```
 ```
 
 ### Installing
