@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 
 const genomeLink = require('genomelink-node');
 
-const scope = 'report:age-spots report:excessive-sweating report:double-edged-eyelids report:sagging-eyelids report:facial-wrinkles report:job-related-exhaustion report:excessive-daytime-sleepiness report:sleep-duration report:breast-size report:waist-hip-ratio report:waist report:visceral-and-subcutaneous-adipose-tissue-ratio report:body-fat-percentage report:lean-body-mass report:body-fat-mass report:height report:freckles report:male-pattern-baldness-aga report:skin-pigmentation report:longevity report:lobe-size report:motion-sickness report:black-hair report:red-hair report:bmi report:weight report:morning-person report:beard-thickness report:eye-color';
+const scope = 'report:excessive-daytime-sleepiness report:freckles report:male-pattern-baldness-aga report:skin-pigmentation report:black-hair report:red-hair report:weight report:beard-thickness report:eye-color';
 
 app.use(session({
 	secret: 'YOURSECRET',
@@ -83,7 +83,6 @@ async function getVisualData(token, scope) {
 		}
 	}
 
-	console.log(red_hair_index, black_hair_index);
 	if (red_hair_index && black_hair_index) {
 
 		const hair_range = [0, 6, 30, 18, 14];
@@ -98,7 +97,6 @@ async function getVisualData(token, scope) {
 		results.beard_tone.text = Math.floor((reports[red_hair_index]._data.summary.score / 5) * 100) + '% red hair and ' + Math.floor((reports[black_hair_index]._data.summary.score / 5) * 100) + '% black hair.';
 
 	}
- 	
 	return results;
 }
 
