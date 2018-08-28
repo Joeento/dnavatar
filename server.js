@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 
 const genomeLink = require('genomelink-node');
 
-const scope = 'report:age-spots report:excessive-sweating report:double-edged-eyelids report:sagging-eyelids report:facial-wrinkles report:job-related-exhaustion report:excessive-daytime-sleepiness report:sleep-duration report:breast-size report:waist-hip-ratio report:waist report:visceral-and-subcutaneous-adipose-tissue-ratio report:body-fat-percentage report:lean-body-mass report:body-fat-mass report:height report:freckles report:male-pattern-baldness-aga report:skin-pigmentation report:longevity report:lobe-size report:motion-sickness report:black-hair report:red-hair report:bmi report:weight report:morning-person report:beard-thickness report:eye-color';
+const scope = 'report:excessive-daytime-sleepiness report:freckles report:male-pattern-baldness-aga report:skin-pigmentation report:weight report:beard-thickness report:eye-color';
 
 app.use(session({
 	secret: 'YOURSECRET',
@@ -74,28 +74,9 @@ async function getVisualData(token, scope) {
 				results[trait].score = report_to_trait[report].map[reports[index]._data.summary.score];
 				results[trait].text = reports[index]._data.summary.text;
 			}
-			if (report == 'black-hair') {
-				black_hair_index = index;
-			} else if (report == 'red-hair') {
-				red_hair_index = index;
-			}
+			
 			
 		}
-	}
-
-	if (red_hair_index && black_hair_index) {
-
-		const hair_range = [0, 6, 30, 18, 14];
-		let hair_average = Math.round(reports[red_hair_index]._data.summary.score + reports[black_hair_index]._data.summary.score) / 2;
-
-		results.hair_tone = {};
-		results.hair_tone.score = hair_range[hair_average];
-		results.hair_tone.text = Math.floor((reports[red_hair_index]._data.summary.score / 5) * 100) + '% red hair and ' + Math.floor((reports[black_hair_index]._data.summary.score / 5) * 100) + '% black hair.';
-
-		results.beard_tone = {};
-		results.beard_tone.score = hair_range[hair_average];
-		results.beard_tone.text = Math.floor((reports[red_hair_index]._data.summary.score / 5) * 100) + '% red hair and ' + Math.floor((reports[black_hair_index]._data.summary.score / 5) * 100) + '% black hair.';
-
 	}
 	return results;
 }
